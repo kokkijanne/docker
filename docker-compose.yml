@@ -8,14 +8,15 @@ services:
     container_name: app
     tty: true
     restart: unless-stopped
-    environment:
+    environment: 
       DB_HOST: db
       DB_PASSWORD: you_awesomePassword
       SESSION_DRIVER: redis
       REDIS_HOST: redis
-    volumes:
-      - ./var/www:/app
+    volumes: 
+      - ./:/var/www
       - ./config/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    
   webserver:
     build:
       context: .
@@ -23,27 +24,28 @@ services:
     image: tomw1808/nginx
     container_name: webserver
     restart: unless-stopped
-    ports:
+    ports: 
       - "8080:80"
-    volumes:
-      - ./var/www:/app
+    volumes: 
+      - ./:/var/www
       - ./config/nginx/conf.d/:/etc/nginx/conf.d/
-    depends_on:
+    depends_on: 
       - app
+  
   db:
     image: mysql:5.7.22
     container_name: db
-    environment:
+    environment: 
       MYSQL_DATABASE: laravel
       MYSQL_ROOT_PASSWORD: you_awesomePassword
-    volumes:
+    volumes: 
       - dbdata:/var/lib/mysql
-
+    
   redis:
     image: redis:latest
     container_name: redis
 
-volumes:
+volumes: 
   dbdata:
     driver: local
 
